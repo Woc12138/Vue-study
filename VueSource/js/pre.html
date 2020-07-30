@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+
+  <div id="test">尚硅谷IT教育</div>
+
+  <ul id="fragment_test">
+    <li>test1</li>
+    <li>test2</li>
+    <li>test3</li>
+  </ul>
+
+
+  <!--
+1. [].slice.call(lis): 将伪数组转换为真数组
+2. node.nodeType: 得到节点类型
+3. Object.defineProperty(obj, propertyName, {}): 给对象添加属性(指定描述符)
+4. Object.keys(obj): 得到对象自身可枚举属性组成的数组
+5. obj.hasOwnProperty(prop): 判断prop是否是obj自身的属性
+6. DocumentFragment: 文档碎片(高效批量更新多个节点)
+-->
+
+  <script type="text/javascript">
+    /* //1. [].slice.call(lis): 根据伪数组生成对应的真数组
+    const lis = document.getElementsByTagName('li') // lis是伪数组(是一个特别的对象, length和数值下标属性)
+    console.log(lis instanceof Object, lis instanceof Array, lis.forEach) // true false undifined
+    const lis2 = [...lis].forEach(i => {
+      console.log(i)
+    }) // ƒ forEach() { [native code] }
+    const obj = {
+      firstName: 'A',
+      lastName: 'B'
+    }
+    Object.defineProperty(obj, 'fullName', {
+      //value: 'A-B',
+      //configurable: true,
+      //writable: true,
+      //enumerable: true,
+      get() {
+        return this.firstName + '-' + this.lastName
+      },
+      set(value) {
+        const names = value.split('-')
+        this.firstName = names[0]
+        this.lastName = names[1]
+      }
+    })
+    console.log(obj.fullName) //A-B
+    obj.firstName = 'C'
+    obj.lastName = 'D'
+    console.log(obj.fullName) // C-D
+    obj.fullName = 'E-F'
+    console.log(obj.firstName, obj.lastName) // E F */
+    const ul = document.getElementById("fragment_test")
+    // 1. 创建fragment
+    const fragment = document.createDocumentFragment()
+    // 2. 取出ul中所有子节点取出保存到fragment
+    let child
+    while (child = ul.firstChild) {
+      fragment.appendChild(child)
+    }
+    //console.log(fragment.children) // children元素节点
+    // 3. 更新fragment中所有li的文本
+    //console.log(fragment.childNodes instanceof Array) // false
+    //console.log(fragment.childNodes.forEach) // ƒ forEach() { [native code] } 可以foreach遍历
+    //const childArr = [...fragment.childNodes] //(1)
+    const childArr = Object.values(fragment.childNodes) //(2)
+    console.log(childArr instanceof Array) // true
+    //const childArr = Array.from(fragment.childNodes) //(3)
+    //console.log(childArr instanceof Array) // true
+    // const childArr = Array.prototype.slice.call(fragment.childNodes) //(4)
+    childArr.forEach(node => { // childNodes所有子节点
+      if (node.nodeType === 1) {
+        node.textContent = "woc12138"
+      }
+    })
+
+    ul.appendChild(fragment)
+  </script>
+</body>
+
+</html>
